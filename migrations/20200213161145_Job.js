@@ -10,7 +10,6 @@ exports.up = knex => {
       .onDelete('SET NULL')
       .index();
 
-    table.string('slug');
     table.string('email');
     table.string('position');
     table.string('description');

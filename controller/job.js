@@ -31,17 +31,14 @@ async function findOrCreateTag(tags) {
 module.exports = {
   async createJob(req, res) {
     try {
-      // await Job.query().delete();
-
       // Need to create the tags first if they don't exist.
-      const tags = ['brand new tag', 'hellllll yeahhhh it works'];
+      const tags = ['react', 'hellllll yeahhhh it works'];
 
       findOrCreateTag(tags).then(async foundOrCreatedTags => {
         console.log(foundOrCreatedTags);
         const job = await Job.query().insertGraph(
           [
             {
-              slug: 'software-developer',
               email: 'umar@gmail.com',
               position: 'Jr. Software Developer',
               description: 'This is not a good opportunity for jr devs',
@@ -54,7 +51,6 @@ module.exports = {
           ],
           { relate: ['tags'] }
         );
-
         res.status(201).send(job);
       });
     } catch (error) {
@@ -63,5 +59,11 @@ module.exports = {
     }
   },
 
-  async
+  async getJobsByTag(req, res) {
+    // TODO: wrap this in a try and catch
+
+    const jobs = await Job.relatedQuery('tags').for(39);
+
+    res.status(201).send(jobs);
+  }
 };

@@ -7,5 +7,6 @@ module.exports = app => {
     });
   });
 
-  app.get('/api/listing/create', jobController.createJob);
+  app.get('/api/job/create', jobController.createJob);
+  app.get('/api/job/tag', jobController.getJobsByTag);
 };

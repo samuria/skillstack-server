@@ -1,8 +1,15 @@
 'use strict';
 const path = require('path');
+const objectionSlug = require('objection-slug');
 const { Model } = require('objection');
 
-class Job extends Model {
+// Create the slug mixin
+const slug = objectionSlug({
+  sourceField: 'position',
+  slugField: 'slug'
+});
+
+class Job extends slug(Model) {
   // Table name is the only required property.
   static get tableName() {
     return 'jobs';
