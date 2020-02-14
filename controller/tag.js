@@ -21,12 +21,3 @@ module.exports = {
     res.status(200).send(tag);
   }
 };
-
-// async getJobsByTag(req, res) {
-//     try {
-//       const jobs = await Job.relatedQuery('tags').for(500);
-//       res.status(200).send(jobs);
-//     } catch (error) {
-//       res.status(404).send('No jobs found.');
-//     }
-//   }
