@@ -18,6 +18,7 @@ exports.up = knex => {
     table.string('type');
     table.string('apply_url');
     table.string('apply_email');
+    table.integer('companyId');
     table.timestamps(true, true);
   });
 };

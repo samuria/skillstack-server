@@ -35,10 +35,10 @@ class Job extends slug(BaseModel) {
         }
       },
       company: {
-        relation: BaseModel.HasOneRelation,
+        relation: BaseModel.BelongsToOneRelation,
         modelClass: path.join(__dirname, 'Company'),
         join: {
-          from: 'jobs.id',
+          from: 'jobs.companyId',
           to: 'companies.id'
         }
       }
