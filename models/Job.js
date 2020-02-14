@@ -1,7 +1,7 @@
 'use strict';
 const path = require('path');
 const objectionSlug = require('objection-slug');
-const { Model } = require('objection');
+const BaseModel = require('./BaseModel');
 
 // Create the slug mixin
 const slug = objectionSlug({
@@ -9,7 +9,7 @@ const slug = objectionSlug({
   slugField: 'slug'
 });
 
-class Job extends slug(Model) {
+class Job extends slug(BaseModel) {
   // Table name is the only required property.
   static get tableName() {
     return 'jobs';
@@ -17,13 +17,9 @@ class Job extends slug(Model) {
 
   // This object defines the relations to other models.
   static get relationMappings() {
-    // One way to prevent circular references
-    // is to require the model classes here
-    const Tag = require('./Tag');
-
     return {
       tags: {
-        relation: Model.ManyToManyRelation,
+        relation: BaseModel.ManyToManyRelation,
         // The related model. This can either be a Model subclass or an
         // absolute file path to a module that exports one.
         modelClass: path.join(__dirname, 'Tag'),

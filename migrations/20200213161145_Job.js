@@ -10,6 +10,7 @@ exports.up = knex => {
       .onDelete('SET NULL')
       .index();
 
+    table.string('slug');
     table.string('email');
     table.string('position');
     table.string('description');
@@ -17,6 +18,7 @@ exports.up = knex => {
     table.string('type');
     table.string('apply_url');
     table.string('apply_email');
+    table.timestamps(true, true);
   });
 };
 

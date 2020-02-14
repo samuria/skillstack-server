@@ -1,17 +1,22 @@
 const path = require('path');
-const { Model } = require('objection');
+const objectionSlug = require('objection-slug');
+const BaseModel = require('./BaseModel');
 
-class Tag extends Model {
+// Create the slug mixin
+const slug = objectionSlug({
+  sourceField: 'name',
+  slugField: 'slug'
+});
+
+class Tag extends slug(BaseModel) {
   static get tableName() {
     return 'tags';
   }
 
   static get relationMappings() {
-    const Job = require('./Job');
-
     return {
       jobs: {
-        relation: Model.ManyToManyRelation,
+        relation: BaseModel.ManyToManyRelation,
         modelClass: path.join(__dirname, 'Job'),
         join: {
           from: 'tags.id',

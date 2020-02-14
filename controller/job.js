@@ -3,6 +3,12 @@ const async = require('async');
 const { Job } = require('../models/Job');
 const { Tag } = require('../models/Tag');
 
+function isUniqueConstraintError(err) {
+  if (!err) return false;
+  var re = /^duplicate key value violates unique constraint/;
+  return re.test(err.message);
+}
+
 async function findOrCreateTag(tags) {
   var completeTags = [];
 
@@ -32,10 +38,9 @@ module.exports = {
   async createJob(req, res) {
     try {
       // Need to create the tags first if they don't exist.
-      const tags = ['react', 'hellllll yeahhhh it works'];
+      const tags = ['react', 'test tag'];
 
       findOrCreateTag(tags).then(async foundOrCreatedTags => {
-        console.log(foundOrCreatedTags);
         const job = await Job.query().insertGraph(
           [
             {
@@ -59,11 +64,16 @@ module.exports = {
     }
   },
 
-  async getJobsByTag(req, res) {
-    // TODO: wrap this in a try and catch
-
-    const jobs = await Job.relatedQuery('tags').for(39);
-
-    res.status(201).send(jobs);
+  async getAllJobs(req, res) {
+    try {
+      const jobs = await Job.query()
+        .withGraphFetched('tags')
+        .modifyGraph('tags', builder => {
+          builder.select('name', 'slug');
+        });
+      res.status(200).send(jobs);
+    } catch (error) {
+      res.status(500).send(error);
+    }
   }
 };

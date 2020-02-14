@@ -1,4 +1,5 @@
 const jobController = require('../controller').job;
+const tagController = require('../controller').tag;
 
 module.exports = app => {
   app.get('/api', (req, res) => {
@@ -7,6 +8,10 @@ module.exports = app => {
     });
   });
 
-  app.get('/api/job/create', jobController.createJob);
-  app.get('/api/job/tag', jobController.getJobsByTag);
+  // Jobs
+  app.get('/api/jobs', jobController.getAllJobs);
+  app.get('/api/jobs/create', jobController.createJob);
+
+  // Tags
+  app.get('/api/tags', tagController.getAllTags);
 };
