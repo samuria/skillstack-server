@@ -36,22 +36,23 @@ async function findOrCreateTag(tags) {
 
 module.exports = {
   async createJob(req, res) {
+    console.log(req.body);
+
     try {
       // Need to create the tags first if they don't exist.
-      const tags = ['react', 'test tag'];
-
-      findOrCreateTag(tags).then(async foundOrCreatedTags => {
+      // const tags = ['vuejs'];
+      findOrCreateTag(req.body.tags).then(async foundOrCreatedTags => {
         const job = await Job.query()
           .insertGraph(
             [
               {
-                email: 'umar@gmail.com',
-                position: 'Jr. Software Developer',
-                description: 'This is not a good opportunity for jr devs',
-                location: 'Adelaide',
-                type: 'Full Time',
-                apply_url: 'http://www.example.com',
-                apply_email: 'example@example.com',
+                email: req.body.email,
+                position: req.body.position,
+                description: req.body.description,
+                location: req.body.location,
+                type: req.body.type,
+                apply_url: req.body.apply_url,
+                apply_email: req.body.apply_email,
                 tags: foundOrCreatedTags
               }
             ],
@@ -66,7 +67,7 @@ module.exports = {
     }
   },
 
-  async fetchAll(req, res) {
+  async fetchAllJobs(req, res) {
     try {
       const jobs = await Job.query()
         .withGraphFetched('tags')
@@ -80,14 +81,18 @@ module.exports = {
   },
 
   async fetchBySlug(req, res) {
-    const slug = 'jr-software-developer-1';
-    try {
-      const job = await Job.query()
-        .where('slug', '=', slug)
-        .first();
+    const job = await Job.query()
+      .where('slug', '=', req.params.slug)
+      .withGraphFetched('tags')
+      .modifyGraph('tags', builder => {
+        builder.select('name', 'slug');
+      })
+      .first();
+
+    if (job) {
       res.status(200).send(job);
-    } catch (error) {
-      res.status(404).send(error);
+    } else {
+      res.status(404).send('Resource not found');
     }
   }
 };
