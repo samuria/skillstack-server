@@ -3,12 +3,6 @@ const companyController = require('../controller').company;
 const tagController = require('../controller').tag;
 
 module.exports = app => {
-  app.get('/api', (req, res) => {
-    res.status(200).send({
-      data: 'Welcome to Node API v1'
-    });
-  });
-
   // Jobs
   app.get('/api/jobs', jobController.fetchAllJobs);
   app.get('/api/jobs/:slug', jobController.fetchBySlug);

@@ -12,9 +12,10 @@ const knex = Knex(knexConfig.development);
 // you use any of your model classes.
 Model.knex(knex);
 
-// Initialize express
+// Setup express
 const app = express();
 app.use(bodyParser.json());
+app.use('/api', express.static('public')); // Load documentation on root endpoint
 
 // Bring in api routes
 require('./routes')(app);

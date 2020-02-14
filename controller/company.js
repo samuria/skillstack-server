@@ -14,7 +14,6 @@ module.exports = {
         .first();
       res.status(200).send(jobs);
     } catch (error) {
-      console.log(error);
       res.status(500).send(error);
     }
   }

@@ -19,7 +19,6 @@ async function findOrCreateTag(tags) {
       try {
         fetched = await Tag.query().insert({ name: tag });
       } catch (error) {
-        console.log(error);
         if (isUniqueConstraintError) {
           fetched = await Tag.query().where({ name: tag });
         }
@@ -39,16 +38,11 @@ async function findOrCreateCompany(company) {
   if (fetched.length === 0) {
     try {
       fetched = await Company.query().insert(company);
-      console.log('CREATED NEW COMPANY!', fetched);
     } catch (error) {
-      console.log(error);
       if (isUniqueConstraintError) {
         fetched = await Company.query().where({ name: company.name });
-        console.log('FOUND EXISTING COMPANY', fetched);
       }
     }
-  } else {
-    console.log('PROCEEDING WITH INITIALLY FOUND COMPANY', fetched);
   }
 
   return fetched;
@@ -62,7 +56,6 @@ module.exports = {
       // Need to create the tags first if they don't exist.
       // const tags = ['vuejs'];
       findOrCreateTag(req.body.tags).then(async foundOrCreatedTags => {
-        console.log('final call', foundOrCreatedCompany);
         const job = await Job.query()
           .insertGraph(
             {
@@ -82,7 +75,6 @@ module.exports = {
         res.status(201).send(job);
       });
     } catch (error) {
-      console.log(error);
       res.status(400).send(error);
     }
   },
