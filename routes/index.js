@@ -9,7 +9,8 @@ module.exports = app => {
   });
 
   // Jobs
-  app.get('/api/jobs', jobController.getAllJobs);
+  app.get('/api/jobs', jobController.fetchAll);
+  app.get('/api/jobs/byslug', jobController.fetchBySlug);
   app.get('/api/jobs/create', jobController.createJob);
 
   // Tags

@@ -41,21 +41,23 @@ module.exports = {
       const tags = ['react', 'test tag'];
 
       findOrCreateTag(tags).then(async foundOrCreatedTags => {
-        const job = await Job.query().insertGraph(
-          [
-            {
-              email: 'umar@gmail.com',
-              position: 'Jr. Software Developer',
-              description: 'This is not a good opportunity for jr devs',
-              location: 'Adelaide',
-              type: 'Full Time',
-              apply_url: 'http://www.example.com',
-              apply_email: 'example@example.com',
-              tags: foundOrCreatedTags
-            }
-          ],
-          { relate: ['tags'] }
-        );
+        const job = await Job.query()
+          .insertGraph(
+            [
+              {
+                email: 'umar@gmail.com',
+                position: 'Jr. Software Developer',
+                description: 'This is not a good opportunity for jr devs',
+                location: 'Adelaide',
+                type: 'Full Time',
+                apply_url: 'http://www.example.com',
+                apply_email: 'example@example.com',
+                tags: foundOrCreatedTags
+              }
+            ],
+            { relate: ['tags'] }
+          )
+          .first();
         res.status(201).send(job);
       });
     } catch (error) {
@@ -64,7 +66,7 @@ module.exports = {
     }
   },
 
-  async getAllJobs(req, res) {
+  async fetchAll(req, res) {
     try {
       const jobs = await Job.query()
         .withGraphFetched('tags')
@@ -74,6 +76,18 @@ module.exports = {
       res.status(200).send(jobs);
     } catch (error) {
       res.status(500).send(error);
+    }
+  },
+
+  async fetchBySlug(req, res) {
+    const slug = 'jr-software-developer-1';
+    try {
+      const job = await Job.query()
+        .where('slug', '=', slug)
+        .first();
+      res.status(200).send(job);
+    } catch (error) {
+      res.status(404).send(error);
     }
   }
 };
