@@ -1,6 +1,6 @@
 const _ = require('lodash');
-const async = require('async');
 const { Job } = require('../models/Job');
+const { Company } = require('../models/Company');
 const { Tag } = require('../models/Tag');
 
 function isUniqueConstraintError(err) {
@@ -34,13 +34,35 @@ async function findOrCreateTag(tags) {
   return _.flatMap(completeTags);
 }
 
+// TODO: This method can be removed if I end up just adding the company with the Job model
+
+async function findOrCreateCompany(company) {
+  var newCompany;
+  const fetchedCompany = await Company.query()
+    .where({
+      name: company.name
+    })
+    .first();
+
+  if (fetchedCompany) {
+    newCompany = fetchedCompany;
+    console.log('COMPANY ALREADY EXISTS');
+    console.log(company);
+  } else {
+    newCompany = await Company.query().insert(company);
+    console.log('COMPANY DOES NOT EXIST');
+    console.log(newCompany);
+  }
+
+  return newCompany;
+}
+
 module.exports = {
   async createJob(req, res) {
-    console.log(req.body);
-
     try {
       // Need to create the tags first if they don't exist.
       // const tags = ['vuejs'];
+
       findOrCreateTag(req.body.tags).then(async foundOrCreatedTags => {
         const job = await Job.query()
           .insertGraph(

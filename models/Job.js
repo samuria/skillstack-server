@@ -2,6 +2,7 @@
 const path = require('path');
 const objectionSlug = require('objection-slug');
 const BaseModel = require('./BaseModel');
+const Company = require('./Company');
 
 // Create the slug mixin
 const slug = objectionSlug({
@@ -31,6 +32,14 @@ class Job extends slug(BaseModel) {
             to: 'jobs_tags.tagId'
           },
           to: 'tags.id'
+        }
+      },
+      company: {
+        relation: BaseModel.HasOneRelation,
+        modelClass: path.join(__dirname, 'Company'),
+        join: {
+          from: 'jobs.id',
+          to: 'companies.id'
         }
       }
     };

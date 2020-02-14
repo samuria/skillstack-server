@@ -24,23 +24,3 @@ const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Listening to port ${PORT}`);
 });
-
-// async function main() {
-//   // Delete all jobs from the db.
-
-//   // Insert one row to the database.
-//   await Job.query().insert({
-//     position: 'Jr. Software Developer',
-//     location: 'Adelaide'
-//   });
-
-//   // Read all rows from the db.
-//   const people = await Job.query();
-
-//   console.log(people);
-// }
-
-// knex.destroy().catch(err => {
-//   console.error(err);
-//   return knex.destroy();
-// });

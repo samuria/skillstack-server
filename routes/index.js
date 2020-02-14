@@ -1,4 +1,5 @@
 const jobController = require('../controller').job;
+const companyController = require('../controller').company;
 const tagController = require('../controller').tag;
 
 module.exports = app => {
@@ -12,6 +13,10 @@ module.exports = app => {
   app.get('/api/jobs', jobController.fetchAllJobs);
   app.get('/api/jobs/:slug', jobController.fetchBySlug);
   app.post('/api/jobs', jobController.createJob);
+
+  // Companies
+  app.get('/api/companies', companyController.fetchAllCompanies);
+  app.post('/api/companies', companyController.createCompany);
 
   // Tags
   app.get('/api/tags', tagController.fetchAllTags);
