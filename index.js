@@ -20,7 +20,6 @@ app.use('/api', express.static('public')); // Load documentation on root endpoin
 // Bring in api routes
 require('./routes')(app);
 
-// Listen to API
 const PORT = 3000;
 app.listen(PORT, () => {
   console.log(`Listening to port ${PORT}`);
