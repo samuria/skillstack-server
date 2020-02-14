@@ -144,15 +144,5 @@ module.exports = {
     } else {
       res.status(404).send('Resource not found');
     }
-  },
-
-  async fetchByCompany(req, res) {
-    try {
-      const job = await Job.query().withGraphFetched('companies');
-      console.log('RUNNING');
-      res.status(200).send(job);
-    } catch (error) {
-      res.status(500).send(error);
-    }
   }
 };

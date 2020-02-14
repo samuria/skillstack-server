@@ -19,7 +19,7 @@ class Company extends slug(BaseModel) {
         relation: BaseModel.HasManyRelation,
         modelClass: path.join(__dirname, 'Job'),
         join: {
-          from: 'company.id',
+          from: 'companies.id',
           to: 'jobs.companyId'
         }
       }
