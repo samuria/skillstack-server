@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const Knex = require('knex');
@@ -20,7 +21,7 @@ app.use('/api', express.static('public')); // Load documentation on root endpoin
 // Bring in api routes
 require('./routes')(app);
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`Listening to port ${PORT}`);
 });

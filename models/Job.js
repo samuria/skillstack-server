@@ -17,7 +17,6 @@ class Job extends slug(BaseModel) {
 
   // This object defines the relations to other models.
   static get relationMappings() {
-    const Company = require('./Company');
     return {
       tags: {
         relation: BaseModel.ManyToManyRelation,
@@ -36,7 +35,7 @@ class Job extends slug(BaseModel) {
       },
       company: {
         relation: BaseModel.BelongsToOneRelation,
-        modelClass: Company,
+        modelClass: path.join(__dirname, 'Company'),
         join: {
           from: 'jobs.companyId',
           to: 'companies.id'

@@ -81,29 +81,13 @@ module.exports = {
 
   async fetchAllJobs(req, res) {
     try {
-      const jobs = await Job.query()
-        .withGraphFetched(
-          '[tags(selectNameAndSlug), company(omitTimestampsFromCompany)]'
-        )
-        .modifiers({
-          selectNameAndSlug(builder) {
-            builder.select('name', 'slug');
-          },
-
-          omitTimestampsFromCompany(builder) {
-            builder.select(
-              'name',
-              'slug',
-              'logo',
-              'website',
-              'twitter',
-              'linkedin'
-            );
-          }
-        });
+      const jobs = await Job.query().withGraphFetched(
+        '[tags(selectNameAndSlug), company(omitTimestamps)]'
+      );
 
       res.status(200).send(jobs);
     } catch (error) {
+      console.log(error);
       res.status(500).send(error);
     }
   },
@@ -111,25 +95,8 @@ module.exports = {
   async fetchBySlug(req, res) {
     const job = await Job.query()
       .where({ slug: req.params.slug })
-      .withGraphFetched(
-        '[tags(selectNameAndSlug), company(omitTimestampsFromCompany)]'
-      )
-      .modifiers({
-        selectNameAndSlug(builder) {
-          builder.select('name', 'slug');
-        },
-
-        omitTimestampsFromCompany(builder) {
-          builder.select(
-            'name',
-            'slug',
-            'logo',
-            'website',
-            'twitter',
-            'linkedin'
-          );
-        }
-      });
+      .withGraphFetched('[tags(selectNameAndSlug), company(omitTimestamps)]')
+      .first();
 
     if (job) {
       res.status(200).send(job);

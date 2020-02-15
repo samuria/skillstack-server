@@ -12,11 +12,10 @@ module.exports = {
 
   async fetchJobByTag(req, res) {
     const tag = await Tag.query()
-      .where('slug', '=', req.params.slug)
-      .withGraphFetched('jobs.[tags]')
-      .modifyGraph('jobs.[tags]', builder => {
-        builder.select('name', 'slug');
-      });
+      .where('slug', req.params.slug)
+      .withGraphFetched(
+        'jobs.[tags(selectNameAndSlug), company(omitTimestamps)]'
+      );
 
     res.status(200).send(tag);
   }

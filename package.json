@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "migrate": "knex migrate:latest",
-    "start": "npm run migrate && nodemon index"
+    "start": "npm run migrate && nodemon index.js"
   },
   "author": "Umar Ahmed",
   "license": "MIT",

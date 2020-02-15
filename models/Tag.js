@@ -13,6 +13,14 @@ class Tag extends slug(BaseModel) {
     return 'tags';
   }
 
+  static get modifiers() {
+    return {
+      selectNameAndSlug(builder) {
+        builder.select('name', 'slug');
+      }
+    };
+  }
+
   static get relationMappings() {
     return {
       jobs: {

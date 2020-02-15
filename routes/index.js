@@ -11,7 +11,7 @@ module.exports = app => {
   // Companies
   app.get('/api/companies', companyController.fetchAllCompanies);
   app.get(
-    '/api/companies/:company/posts',
+    '/api/companies/:company/jobs',
     companyController.fetchJobsForCompany
   );
 

@@ -13,6 +13,22 @@ class Company extends slug(BaseModel) {
     return 'companies';
   }
 
+  static get modifiers() {
+    return {
+      // Note that this modifier takes an argument!
+      omitTimestamps(builder) {
+        builder.select(
+          'name',
+          'slug',
+          'logo',
+          'website',
+          'twitter',
+          'linkedin'
+        );
+      }
+    };
+  }
+
   static get relationMappings() {
     return {
       jobs: {
