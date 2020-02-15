@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const { raw } = require('objection');
 const { Job } = require('../models/Job');
 const { Company } = require('../models/Company');
 const { Tag } = require('../models/Tag');
@@ -48,6 +49,34 @@ async function findOrCreateCompany(company) {
   return fetched;
 }
 
+function formatQueryOptions(period) {
+  var queryDetails = {
+    timespan: '',
+    interval: ''
+  };
+
+  switch (period) {
+    case 'daily':
+      queryDetails.timespan = 24;
+      queryDetails.interval = 'hour';
+      break;
+    case 'weekly':
+      queryDetails.timespan = 7;
+      queryDetails.interval = 'day';
+      break;
+    case 'monthly':
+      queryDetails.timespan = 1;
+      queryDetails.interval = 'month';
+      break;
+    default:
+      queryDetails.timespan = 1;
+      queryDetails.interval = 'month';
+      break;
+  }
+
+  return queryDetails;
+}
+
 module.exports = {
   async createJob(req, res) {
     const foundOrCreatedCompany = await findOrCreateCompany(req.body.company);
@@ -81,9 +110,31 @@ module.exports = {
 
   async fetchAllJobs(req, res) {
     try {
-      const jobs = await Job.query().withGraphFetched(
-        '[tags(selectNameAndSlug), company(omitTimestamps)]'
-      );
+      var jobs;
+      if (
+        Object.keys(req.query).includes('limit') &&
+        Object.keys(req.query).includes('period')
+      ) {
+        const queryDetails = formatQueryOptions(req.query.period);
+
+        jobs = await Job.query()
+          .where(
+            'created_at',
+            '>=',
+            raw(`now() - (?*'1 ${queryDetails.interval}'::INTERVAL)`, [
+              queryDetails.timespan
+            ])
+          )
+          .withGraphFetched(
+            '[tags(selectNameAndSlug), company(omitTimestamps)]'
+          )
+          .orderBy('created_at', 'desc')
+          .limit(req.query.limit);
+      } else {
+        jobs = await Job.query().withGraphFetched(
+          '[tags(selectNameAndSlug), company(omitTimestamps)]'
+        );
+      }
 
       res.status(200).send(jobs);
     } catch (error) {
