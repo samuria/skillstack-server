@@ -1,4 +1,5 @@
 const { Tag } = require('../models/Tag');
+const { Job } = require('../models/Job');
 
 module.exports = {
   async fetchAllTags(req, res) {
@@ -11,12 +12,14 @@ module.exports = {
   },
 
   async fetchJobByTag(req, res) {
-    const tag = await Tag.query()
-      .where('slug', req.params.slug)
-      .withGraphFetched(
-        'jobs.[tags(selectNameAndSlug), company(omitTimestamps)]'
-      );
-
-    res.status(200).send(tag);
+    try {
+      const jobs = await Job.query()
+        .whereExists(Job.relatedQuery('tags').where('slug', req.params.slug))
+        .withGraphFetched('[tags(selectNameAndSlug), company(omitTimestamps)]');
+      res.status(200).send(jobs);
+    } catch (error) {
+      console.log(error);
+      res.status(500).send(error);
+    }
   }
 };

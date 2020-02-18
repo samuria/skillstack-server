@@ -2,14 +2,6 @@ exports.up = knex => {
   return knex.schema.createTable('jobs', table => {
     table.increments('id').primary();
 
-    table
-      .integer('jobId')
-      .unsigned()
-      .references('id')
-      .inTable('jobs')
-      .onDelete('SET NULL')
-      .index();
-
     table.string('slug');
     table.string('email');
     table.string('position');
