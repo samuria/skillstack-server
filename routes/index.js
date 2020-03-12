@@ -6,20 +6,17 @@ const tagController = require('../controller').tag;
 
 module.exports = app => {
   // Jobs
-  app.get('/api/jobs', jobController.fetchAllJobs);
-  app.get('/api/jobs/:slug', jobController.fetchBySlug);
-  app.post('/api/jobs', jobController.createJob);
+  app.get('/jobs', jobController.fetchAllJobs);
+  app.get('/jobs/:slug', jobController.fetchBySlug);
+  app.post('/jobs', jobController.createJob);
 
   // Companies
-  app.get('/api/companies', companyController.fetchAllCompanies);
-  app.get(
-    '/api/companies/:company/jobs',
-    companyController.fetchJobsForCompany
-  );
+  app.get('/companies', companyController.fetchAllCompanies);
+  app.get('/companies/:company/jobs', companyController.fetchJobsForCompany);
 
   // Tags
-  app.get('/api/tags', tagController.fetchAllTags);
-  app.get('/api/tags/:slug/jobs', tagController.fetchJobByTag);
+  app.get('/tags', tagController.fetchAllTags);
+  app.get('/tags/:slug/jobs', tagController.fetchJobByTag);
 };
 
 // // Jobs

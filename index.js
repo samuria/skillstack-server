@@ -19,7 +19,7 @@ Model.knex(knex);
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api', express.static('public')); // Load documentation on root endpoint
+app.use('/', express.static('public')); // Load documentation on root endpoint
 
 // Bring in api routes
 require('./routes')(app);
