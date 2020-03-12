@@ -5,7 +5,7 @@ exports.up = knex => {
     table.string('slug');
     table.string('email');
     table.string('position');
-    table.string('description');
+    table.text('description');
     table.string('location');
     table.string('type');
     table.string('apply_url');
